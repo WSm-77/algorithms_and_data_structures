@@ -16,7 +16,7 @@ def insertion_sort(tab: list) -> None:
 
 
 if __name__ == "__main__":
-    tab = [randint(1, 100) for _ in range(8, 15)]
+    tab = [randint(1, 100) for _ in range(randint(8, 16))]
     print(f"unsorted array: {tab[1:]}")
     insertion_sort(tab)
     print(f"sorted array: {tab[1:]}")
