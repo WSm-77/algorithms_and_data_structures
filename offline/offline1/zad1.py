@@ -1,110 +1,81 @@
 # Wiktor Sędzimir
 #
-# opis:
-# Algorytm w zależności od wielkości "k" w stosunku do "n" korzysta z merge sorta lub odmiany selection sorta (wybiera szybszy algorytm).
-# Złożoność czasowa zmodyfikowanej wersji selection sorta wynosi O(n*k). Wówczas dla:
-# 1) k = O(1) jego złożoność wynosi O(n), więc jest lepsza od złożoności merge sorta,
-# 2) k = O(log n) jego złożoność wynosi O(n*log n), więc jest porównywalna ze złożonością merge sorta,
-# 3) k = O(n) jego złożoność wynosi O(n*n), więc jest gorsza od złożoności merge sorta.
-# Zmodyfikowana wersja selection sorta działa na podobnej zasadzie co wersja oryginalna, tylko zamiast przeszukiwać listę do końca
-# w celu znalezienia minimum przeszukuje jedynie "k" elementów w przód, ponieważ specyfika k-chaotycznej listy daje nam gwarancję
-# znalezienia wśród tych "k" liczb minimum
+# opis działania:
+# Algorytm jest odmianą heap sorta, który korzysta z kopca o wielkości k+1 elementów, w którym u samej góry znajdują się najmniejsze elementy.
+# Na początku algorytm tworzy kopiec z pierwszych k+1 elementów linked listy. Póżniej cyklicznie zdejmuje element znajdujący się u szczytu kopca i dodaje
+# go na koniec wynikowej listy. Kolejny krok to dodanie elementu z nie posortowanej listy na szczyt kopca oraz jego naprawa. Po wyczerpaniu elementów 
+# z k-chaotycznej listy pozostaje opróżnienie kopca i dodanie jego elementów do posortowanej listy.  
+# uzasadnienie poprawności:
+# k-chaotyczne listy charakteryzują sie tym, że element, który powinien znajdować się na pozycji o indeksie 0, znajduje się na pozycji oddalonej o co 
+# najwyżej "k". Oznacze to, że wśród pierwszych k+1 elementów listy na pewno znajduje się najmniejszy element z listy, a użycie kopca gwarantuje, źe będzie
+# się on znajdował na jego szczycie. Możemy zatem wziąć ten element i umieścić w posortowanej liści. Teraz bierzemy element znajdujący się pod k+1 indeksem
+# nieposortowanej listy i dodajemy go do kopca, co oznacza że w kopcu znajduje się już element, który powinien znajdować się pod indeksem 1 w posortowanej 
+# liście (po naprawieniu kopca znowu będzie znajdował się na jego szczycie). Jeżeli rozważamy n-ty indeks posortowanej listy to dodajemy do kopca (n+k)-ty
+# element nieposortowanej listy, co oznacza, że pod n-tym indeksem powinien znajdować się nowo dodany element lub jeden z pozostałych w kopcu, który jeszcze
+# nie został wykorzystany.
+# Algorytm ma złożoność czasową Θ(n log k) oraz pamięciową Θ(k). Dla k = :
+# 1) Θ(1), algortym ma złożoność liniową (Θ(n)) - szybszą od złożoności szybkich algorytmów sortujących,
+# 2) Θ(log n), algortym ma złożoność Θ(n log (log n)) - szybszą od złożoności szybkich algorytmów sortujących,
+# 3) Θ(n), algortym ma złożoność Θ(n log n) - porównywalną z szybkością zwykłego heap sorta, merge sorta czy quick sorta.
 
 from zad1testy import Node, runtests
 
-def linked_list_len(ptr: Node) -> int:
-    listLen = 0
-    while ptr != None:
-        listLen += 1
-        ptr = ptr.next
-    #end while
-    return listLen
+def heapify(heap, heapSize, index):
+    mini = index
+    left = 2*index + 1
+    right = 2*index + 2
 
-def log2(number: int) -> int:
-    result = -1
-    val = 1
-    while val <= number:
-        result += 1
-        val *= 2
-    #end while
-    return result
+    if left < heapSize and heap[left].val < heap[mini].val:
+        mini = left
 
-def modified_selection_sort(p: Node, k: int) -> Node:
-    guradian = Node()
-    guradian.next = p
-    sortedBeg = Node()
-    sortedEnd = sortedBeg
-    while guradian.next != None:
-        mini = guradian
-        p = guradian.next
-        cnt = 1
-        while p.next != None and cnt <= k:
-            if p.next.val < mini.next.val:
-                mini = p 
-            p = p.next
-            cnt += 1
-        #end while
-        sortedEnd.next = mini.next
-        mini.next = mini.next.next
-        sortedEnd = sortedEnd.next
-        sortedEnd.next = None
-    #end while
-    return sortedBeg.next
+    if right < heapSize and heap[right].val < heap[mini].val:
+        mini = right
 
-def merge_sort(ptr: Node) -> Node:
-    if ptr == None or ptr.next == None:
-        return ptr
-    #end if
-    midPtr = linked_list_middle(ptr)
-    tmp = midPtr
-    midPtr = midPtr.next
-    tmp.next = None
-    list1 = merge_sort(ptr)
-    list2 = merge_sort(midPtr)
-    return merge_sorted_linked_lists(list1, list2)
+    if mini != index:
+        heap[mini], heap[index] = heap[index], heap[mini]
+        heapify(heap, heapSize, mini)
 
-def merge_sorted_linked_lists(list1: Node, list2: Node) -> Node:
-    guardian = Node()
-    last = guardian
-    while list1 != None and list2 != None:
-        if list1.val < list2.val:
-            last.next = list1
-            list1 = list1.next
-        else:
-            last.next = list2
-            list2 = list2.next
-        #end if
-        last = last.next
-        last.next = None
-    #end while
-    remaining = list1
-    if list2 != None:
-        remaining = list2
-    #end if
-    last.next = remaining
-    return guardian.next
-
-def linked_list_middle(ptr: Node) -> Node:
-    slow = ptr
-    fast = ptr.next
-    while fast != None and fast.next != None:
-        slow = slow.next
-        fast = fast.next.next
-    #end while
-    return slow
+def build_heap(tab, heapSize):
+    for i in range(heapSize - 1, -1, -1):
+        heapify(tab, heapSize, i)
 
 def SortH(p,k):
     # tu prosze wpisac wlasna implementacje
     if k == 0:
         return p
-    n = linked_list_len(p)
-    result = None
-    if k < log2(n):
-        result = modified_selection_sort(p, k)
-    else:
-        result = merge_sort(p)
-    #end if
-    return result
+    
+    result = Node()
+    lastElem = result
+    heapSize = k + 1
+    heap = [0 for _ in range(heapSize)]
+    for i in range(heapSize):
+        if p != None:
+            heap[i] = p
+            p = p.next
+        else:
+            heapSize = i
+            break
+    #end for
+        
+    build_heap(heap, heapSize)
+
+    while p != None:
+        lastElem.next = heap[0]
+        lastElem = lastElem.next
+        heap[0] = p
+        heapify(heap, heapSize, 0)
+        p = p.next
+    #end while
+        
+    for i in range(heapSize - 1, -1, -1):
+        heap[i], heap[0] = heap[0], heap[i]
+        lastElem.next = heap[i]
+        lastElem = lastElem.next
+        heapify(heap, i, 0)
+    #end for
+    lastElem.next = None
+
+    return result.next
 
 # zmien all_tests na True zeby uruchomic wszystkie testy
 runtests( SortH, all_tests = True )
