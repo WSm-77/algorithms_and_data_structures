@@ -1,9 +1,11 @@
 # Wiktor Sędzimir
 #
 # Opis:
-#
-# uzupełnić
-#
+# Algorytm opiera się na stworzeniu dwóch kopców: pierwszy - kopiec maksymalny wielkości p - k elementów, drugi - kopiec minimalny zawierający k elementów.
+# Dzięki temu k-ty największy element spośród p elmentów będzie się znajdował na samym szczycie kopca minimalnego. Przechodząc o jedną pozycję dalej 
+# w oryginalnej tablicy musimy usunąć najstarszy element z naszej struktury oraz dodać do niej kolejny element z tablicy. Dzięki wykorzystaniu kopców
+# jesteśmy to w stanie zrobić w czasie logarytmicznym. Do znalezienia najstarszego elementu w kopcu stosujemy tablicę pomocniczą indexesInHeap, która zawiera
+# ID kopca oraz indeks pod którym znajduje się w kopcu szukany element.  
 
 from zad2testy import runtests
 
@@ -33,33 +35,16 @@ def heap_replace(originalTab: list, indexToAddOriginal: int, heap: list[HeapElem
     toAdd = HeapElement(originalTab[indexToAddOriginal], indexToAddOriginal)
 
 
-    # 0 - we add to heap 1 and remove from heap 1
-    # 1 - we add to heap 1 and remove from heap 0
-    # 2 - we add to heap 0 and remove from heap 0
-    # 3 - we add to heap 0 and remove from heap 1 
-    result = 0
-
     if toRemoveHeapMap.heapId == 0:
         if toAdd.val <= heap[minHeapFirstIndex].val:
-            result = 2
-        else:
-            result = 1
-    else:
-        if toAdd.val >= heap[0].val:
-            result = 0
-        else:
-            result = 3
-
-    
-    match result:
-        case 0:
+            # dodajemy do kopca nr 0 i usuwamy z kopca nr 0
             heap[toRemoveHeapMap.indexInHeap] = toAdd
             toAddHeapMap.indexInHeap = toRemoveHeapMap.indexInHeap
-            toAddHeapMap.heapId = 1
+            toAddHeapMap.heapId = 0
             indexesInHeap[oldestElementIndex] = toAddHeapMap
-            min_heap_repair(heap, indexesInHeap, minHeapFirstIndex, toRemoveHeapMap.indexInHeap)
-        
-        case 1:
+            max_heap_repair(heap, indexesInHeap, minHeapFirstIndex, toRemoveHeapMap.indexInHeap)
+        else:
+            # dodajemy do kopca nr 1 i usuwamy z kopca nr 0
             swap_elements_in_heap(heap, indexesInHeap, minHeapFirstIndex, toRemoveHeapMap.indexInHeap)
             max_heap_repair(heap, indexesInHeap, minHeapFirstIndex, toRemoveHeapMap.indexInHeap)
             heap[minHeapFirstIndex] = toAdd
@@ -67,15 +52,16 @@ def heap_replace(originalTab: list, indexToAddOriginal: int, heap: list[HeapElem
             toAddHeapMap.indexInHeap = minHeapFirstIndex
             indexesInHeap[oldestElementIndex] = toAddHeapMap
             heapify_min(heap, minHeapFirstIndex, indexesInHeap, len(heap) - 1, minHeapFirstIndex)
-
-        case 2:
+    else:
+        if toAdd.val >= heap[0].val:
+            # dodajemy do kopca nr 1 i usuwamy z kopca nr 1
             heap[toRemoveHeapMap.indexInHeap] = toAdd
             toAddHeapMap.indexInHeap = toRemoveHeapMap.indexInHeap
-            toAddHeapMap.heapId = 0
+            toAddHeapMap.heapId = 1
             indexesInHeap[oldestElementIndex] = toAddHeapMap
-            max_heap_repair(heap, indexesInHeap, minHeapFirstIndex, toRemoveHeapMap.indexInHeap)
-
-        case 3:
+            min_heap_repair(heap, indexesInHeap, minHeapFirstIndex, toRemoveHeapMap.indexInHeap)
+        else:
+            # dodajemy do kopca nr 0 i usuwamy z kopca nr 1 
             swap_elements_in_heap(heap, indexesInHeap, 0, toRemoveHeapMap.indexInHeap)
             min_heap_repair(heap, indexesInHeap, minHeapFirstIndex, toRemoveHeapMap.indexInHeap)
             heap[0] = toAdd
@@ -83,19 +69,6 @@ def heap_replace(originalTab: list, indexToAddOriginal: int, heap: list[HeapElem
             toAddHeapMap.heapId = 0
             indexesInHeap[oldestElementIndex] = toAddHeapMap
             heapify_max(heap, indexesInHeap, minHeapFirstIndex - 1, 0)
-
-
-
-
-def max_heap_repair(heap: list[HeapElement], indexesInHeap: list[HeapMap], minHeapFirstIndex: int, indexToRepair: int):
-    parent = parent_index(indexToRepair)
-    if (0 <= parent) and (heap[parent].val < heap[indexToRepair].val):
-        while indexToRepair > 0 and heap[parent].val < heap[indexToRepair].val:
-            swap_elements_in_heap(heap, indexesInHeap, indexToRepair, parent)
-            indexToRepair = parent
-            parent = parent_index(indexToRepair)
-    else:
-        heapify_max(heap, indexesInHeap, minHeapFirstIndex - 1, indexToRepair)
 
 def min_heap_repair(heap: list[HeapElement], indexesInHeap: list[HeapMap], minHeapFirstIndex: int, indexToRepair: int):
     correction = minHeapFirstIndex
@@ -134,6 +107,16 @@ def heapify_min(heap: list[HeapElement], minHeapFirstIndex: int, indexesInHeap: 
 #   max heap    #
 #################
 
+def max_heap_repair(heap: list[HeapElement], indexesInHeap: list[HeapMap], minHeapFirstIndex: int, indexToRepair: int):
+    parent = parent_index(indexToRepair)
+    if (0 <= parent) and (heap[parent].val < heap[indexToRepair].val):
+        while indexToRepair > 0 and heap[parent].val < heap[indexToRepair].val:
+            swap_elements_in_heap(heap, indexesInHeap, indexToRepair, parent)
+            indexToRepair = parent
+            parent = parent_index(indexToRepair)
+    else:
+        heapify_max(heap, indexesInHeap, minHeapFirstIndex - 1, indexToRepair)
+
 def heapify_max(heap: list[HeapElement], indexesInHeap: list[HeapMap], lastIndex: int, toFix: int):
     maxi = toFix
     while True:
@@ -159,12 +142,14 @@ def build_max_heap(tab: list[HeapElement], indexesInHeap: list[HeapMap]):
     for i in range(n - 1, -1, -1):
         heapify_max(tab, indexesInHeap, n-1, i)
 
-def heap_sort(heap: list[HeapElement], indexesInHeap: list[HeapMap]):
+def modified_heap_sort(heap: list[HeapElement], indexesInHeap: list[HeapMap], k: int):
     n = len(heap)
     build_max_heap(heap, indexesInHeap)
 
-    for i in range(n - 1, -1 , -1):
+    for i in range(n - 1, n - k -1 , -1):
         swap_elements_in_heap(heap, indexesInHeap, 0, i)
+        IIH = heapElement_to_heapMap(heap[i], indexesInHeap)
+        IIH.heapId = 1
         heapify_max(heap, indexesInHeap, i - 1, 0)
 
 #######################
@@ -230,19 +215,11 @@ def ksum(T, k, p):
     indexesInHeap = [HeapMap(0, i) for i in range(p)]
     oldestElementIndex = 0
 
-    # sortujemy p pierwszych elementów
+    # rozdzielamy heapArray na dwa kopce: pierwszy z p-k elementami, drugi z k elementami, w tym celu mudyfikujemy heap sorta aby posortował tylko k 
+    # elementów dzięki czemu ostatnie k elementów tworzy minHeap a pozostałe tworzą maxHeap 
     heapArray = [HeapElement(T[i], i) for i in range(p)]
-    heap_sort(heapArray, indexesInHeap)
-    # print_heap(heapArray, indexesInHeap, p)
-
-    # rozdzielamy heapArray na dwa kopce: pierwszy z p-k elementami, drugi z k elementami
+    modified_heap_sort(heapArray, indexesInHeap, k)
     minHeapFirstIndex = p - k
-    for i in range(minHeapFirstIndex//2):
-        swap_elements_in_heap(heapArray, indexesInHeap, i, minHeapFirstIndex - i - 1)
-
-    for i in range(minHeapFirstIndex, p):
-        IIH = heapElement_to_heapMap(heapArray[i], indexesInHeap)
-        IIH.heapId = 1
 
     # przechodzimi przez oryginalną tablicę dopóki nie dojdziemy do jej końca za każdym razem dodając żądaną wartość do sumy
     result = k_th_largest_element(heapArray, minHeapFirstIndex)
