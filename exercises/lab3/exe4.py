@@ -12,19 +12,16 @@ class Node:
     self.next = next
 
 def merge_k_sorted_linked_lists(lists: list[Node]) -> Node:
-    n = len(lists)
+    currentLen = len(lists)
     
-    while n > 1:
-        mergedLists = []
-
-        for i in range(0, n, 2):
-            l1 = lists[i]
-            l2 = lists[i + 1] if i + 1 < n else None
-            mergedLists.append(merge(l1, l2))
+    while currentLen > 1:
+        itterations = (currentLen + 1) // 2
+        for i in range(itterations):
+            l1 = lists[i*2]
+            l2 = lists[i*2 + 1] if 2*i + 1 < currentLen else None
+            lists[i] = merge(l1, l2)
         #end for
-        
-        lists = mergedLists
-        n = len(lists)
+        currentLen = itterations
     #end while
         
     return lists[0]
@@ -54,7 +51,9 @@ def merge(l1: Node, l2: Node) -> Node:
 
 if __name__ == "__main__":
     tab = [remove_guradian(list_to_linked_list(sorted([randint(1, 100) for _ in range(randint(1,5))]))) for _ in range(8, 15)]
+    print("lists to mrege:")
     for i in range(len(tab)):
         print_list(tab[i])
     #end for
+    print("\nresult: ", end="")
     print_list(merge_k_sorted_linked_lists(tab))
