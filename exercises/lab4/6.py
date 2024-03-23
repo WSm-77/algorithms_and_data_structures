@@ -45,6 +45,7 @@ def words_sort(words: list[str]):
     
     words = sortedWords
 
+    # sortujemy wykorzystując radix sort, biorąc tylko te słowa, które mają na tyle liter aby je prównywać
     for letterIndex in range(wordMaxLen - 1 , -1, -1):
         lettersCnt = [0]*26
         wordsWithIlength = letterIndexWordCnt[letterIndex]
@@ -75,5 +76,23 @@ def words_sort(words: list[str]):
 
         
 if __name__ == "__main__":
+    print("set1\n")
     wordsTab = ["kot", "jak", "owca", "kotlet", "kurczak", "pierogi", "kompot"]
-    words_sort(wordsTab)
+    print(*words_sort(wordsTab), sep='\n')
+
+    print("\nset2\n")
+    english_words = [
+        "apple", "banana", "orange", "grape", "kiwi", "strawberry", "blueberry", "pineapple", "watermelon", "peach",
+        "pear", "plum", "cherry", "apricot", "mango", "lemon", "lime", "raspberry", "blackberry", "cranberry",
+        "pomegranate", "fig", "nectarine", "avocado", "coconut", "papaya", "melon", "tangerine", "guava", "dragonfruit",
+        "persimmon", "date", "lychee", "passionfruit", "cantaloupe", "nectar", "kiwifruit", "mandarin", "mulberry",
+        "gooseberry", "apricot", "boysenberry", "honeydew", "elderberry", "grapefruit", "tamarind", "starfruit",
+        "clementine", "durian", "acai", "kumquat", "rhubarb", "jackfruit", "quince", "pumpkin", "zucchini", "carrot",
+        "potato", "tomato", "cucumber", "pepper", "onion", "garlic", "lettuce", "spinach", "broccoli", "cauliflower",
+        "cabbage", "celery", "asparagus", "greenbean", "eggplant", "mushroom", "peas", "corn", "artichoke", "squash",
+        "beetroot", "radish", "turnip", "kale", "sweetpotato", "raddicchio", "brusselsprout", "parsnip", "okra",
+        "fennel", "leek", "rutabaga", "chard", "collardgreens", "endive", "watercress", "arugula", "bokchoy", "tatsoi",
+        "basil", "thyme", "oregano", "rosemary", "sage", "parsley", "mint", "coriander", "cilantro", "dill", "chives", 
+        "water"
+    ]
+    print(*words_sort(english_words), sep="\n")
