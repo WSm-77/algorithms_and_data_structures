@@ -33,7 +33,7 @@ def words_sort(words: list[str]):
         letterIndexWordCnt[j] += letterIndexWordCnt[j + 1]
         i += 1
         j -= 1
-    #end for
+    #end while
         
     sortedWords = [None for _ in range(n)]
 
