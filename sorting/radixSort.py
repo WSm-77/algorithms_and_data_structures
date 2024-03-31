@@ -1,4 +1,4 @@
-# check offline/offline3/6.py for improved version of radix sort (sorts words with different length)
+# check exercises/lab4/exe6.py for improved version of radix sort (sorts words with different length)
 
 def char2index(char):
     return ord(char) - ord("a")
