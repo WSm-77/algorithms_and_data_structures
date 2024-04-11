@@ -86,6 +86,7 @@ def heapify_min(heap: list[HeapElement], minHeapFirstIndex: int, indexesInHeap: 
     indexCorrection = minHeapFirstIndex
     
     while True:
+        mini = toFix
         left = 2*(toFix - indexCorrection) + 1 + indexCorrection
         right = 2*(toFix - indexCorrection) + 2 + indexCorrection
 
@@ -120,6 +121,7 @@ def max_heap_repair(heap: list[HeapElement], indexesInHeap: list[HeapMap], minHe
 def heapify_max(heap: list[HeapElement], indexesInHeap: list[HeapMap], lastIndex: int, toFix: int):
     maxi = toFix
     while True:
+        maxi = toFix
         left = 2*toFix + 1
         right = 2*toFix + 2
 
