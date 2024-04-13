@@ -15,20 +15,22 @@ def cost(board: list[list[int]]):
     # 1: cnt - which time we visit this vertex
     toVisit: deque = deque()
     toVisit.append(((0, 0), 1))
+    visited[0][0] = True
 
     while len(toVisit) > 0:
         pos, cnt = toVisit.popleft()
 
         if cnt < board[pos[0]][pos[1]]:
+            # if not visited[pos[0]][pos[1]]:
             toVisit.append((pos, cnt + 1))
         else:
-            visited[pos[0]][pos[1]] = True
             parentPos = parent[pos[0]][pos[1]]
             distance[pos[0]][pos[1]] = distance[parentPos[0]][parentPos[1]] + cnt
             for x, y in neighbour:
                 neighbourPos = (pos[0] + x, pos[1] + y)
                 if 0 <= neighbourPos[0] < n and 0 <= neighbourPos[1] < n:
                     if not visited[neighbourPos[0]][neighbourPos[1]]:
+                        visited[neighbourPos[0]][neighbourPos[1]] = True
                         toVisit.append((neighbourPos, 1))
                         parent[neighbourPos[0]][neighbourPos[1]] = pos
             #end for
