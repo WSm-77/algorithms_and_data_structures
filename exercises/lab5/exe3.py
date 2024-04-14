@@ -2,6 +2,33 @@
 # dolnego rogu płacąc najmniejszy koszt; wyznaczyć ten koszt
 
 from collections import deque
+from random import randint
+
+def print_path(pos, parents, board):
+    n = len(parent)
+    pathTab = [[' ' for _ in range(n)] for _ in range(n)]
+    while pos != parents[pos[0]][pos[1]]:
+        pathTab[pos[0]][pos[1]] = board[pos[0]][pos[1]]
+        pos = parents[pos[0]][pos[1]]
+    #end while
+    pathTab[pos[0]][pos[1]] = board[pos[0]][pos[1]]
+
+
+    print("+-", "--"*n, "+", sep="")
+    for row in pathTab:
+        print("| ", end="")
+        print(*row, end="")
+        print(" |")
+    print("+-", "--"*n, "+", sep="")
+
+def print_board(board):
+    print("+-", "--"*n, "+", sep="")
+    for row in board:
+        print("| ", end="")
+        print(*row, end="")
+        print(" |")
+    print("+-", "--"*n, "+", sep="")
+
 
 def cost(board: list[list[int]]):
     n = len(board)
@@ -40,11 +67,36 @@ def cost(board: list[list[int]]):
     return distance, parent, visited
 
 if __name__ == "__main__":
+
+    ############ test 1 ############
+
     testBoard = [[1,5,1,1],
                  [5,1,5,1],
                  [5,5,5,1],
                  [5,5,5,1]]
     
     distance, parent, visited = cost(testBoard)
-    print(*distance, sep="\n")
-    print(*parent, sep="\n")
+    n = len(testBoard)
+    print("testBoard:")
+    print_board(testBoard)
+    print()
+    for x in range(n):
+        for y in range(n):
+            print(f"path to ({x}, {y}) with cost {distance[x][y]}:")
+            print_path((x,y), parent, testBoard)
+            print()
+
+    # ############ test 2 ############
+
+    n = randint(3, 8)
+    testBoard = [[randint(1, 5) for _ in range(n)] for _ in range(n)]
+    distance, parent, visited = cost(testBoard)
+
+    print("testBoard:")
+    print_board(testBoard)
+    print()
+    for x in range(n):
+        for y in range(n):
+            print(f"path to ({x}, {y}) with cost {distance[x][y]}:")
+            print_path((x,y), parent, testBoard)
+            print()
