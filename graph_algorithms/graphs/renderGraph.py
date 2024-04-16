@@ -49,13 +49,15 @@ def print_graph_from_list(graph: list[list[int]], name):
 
 if __name__ == "__main__":
     # paste here graph reprezentation
-    graph14 = [[1,2,3,4],
-               [0,2,3,4],
-               [0,1,3,4],
-               [0,1,2,4],
-               [0,1,2,3]]
+    graph15 =  [[1,2,3],
+                [0,2],
+                [0,1,4,5,6],
+                [0,4],
+                [2,3,6],
+                [2,6],
+                [2,4,5]]
 
     # call function for choosen implementation
-    print_graph_from_list(graph14, "graph14")
+    print_graph_from_list(graph15, "graph15")
 
     # after running this file graph representation will be rendered
