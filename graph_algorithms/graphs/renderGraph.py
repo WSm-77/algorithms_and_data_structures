@@ -33,17 +33,19 @@ def print_graph_from_list(graph: list[list[int]], name):
 
 if __name__ == "__main__":
     # paste here graph reprezentation
-    graph10 = [[1,2,4],
-               [3,5],
-               [5,6],
+    graph11 = [[1,5],
+               [2],
+               [3],
+               [4],
+               [0],
                [6],
-               [6,7],
+               [7],
                [8],
-               [],
-               [],
-               [7]]
+               [9],
+               [10],
+               [5]]
 
     # call function for choosen implementation
-    print_graph_from_list(graph10, "graph10")
+    print_graph_from_list(graph11, "graph11")
 
     # after running this file graph representation will be rendered
