@@ -2,7 +2,7 @@
 
 import graphviz
 
-def print_graph_from_matrix(adj_matrix: list[list[int]], name):
+def print_digraph_from_matrix(adj_matrix: list[list[int]], name):
     # Create a directed graph
     g = graphviz.Digraph(format="png")
 
@@ -19,7 +19,7 @@ def print_graph_from_matrix(adj_matrix: list[list[int]], name):
     # Render the graph
     g.render(f'{name}')
 
-def print_graph_from_list(graph: list[list[int]], name):
+def print_digraph_from_list(graph: list[list[int]], name):
     g = graphviz.Digraph(format="png")
 
     for v in range(len(graph)):
@@ -31,21 +31,31 @@ def print_graph_from_list(graph: list[list[int]], name):
 
     g.render(f"{name}")
 
+def print_graph_from_list(graph: list[list[int]], name):
+    g = graphviz.Graph(format="png")
+
+    for v in range(len(graph)):
+        g.node(str(v))
+
+    edges = []
+
+    for vertex in range(len(graph)):
+        for neighbour in graph[vertex]:
+            if (neighbour, vertex) not in edges:
+                edges.append((vertex, neighbour))
+                g.edge(str(vertex), str(neighbour))
+
+    g.render(f"{name}")
+
 if __name__ == "__main__":
     # paste here graph reprezentation
-    graph11 = [[1,5],
-               [2],
-               [3],
-               [4],
-               [0],
-               [6],
-               [7],
-               [8],
-               [9],
-               [10],
-               [5]]
+    graph14 = [[1,2,3,4],
+               [0,2,3,4],
+               [0,1,3,4],
+               [0,1,2,4],
+               [0,1,2,3]]
 
     # call function for choosen implementation
-    print_graph_from_list(graph11, "graph11")
+    print_graph_from_list(graph14, "graph14")
 
     # after running this file graph representation will be rendered
