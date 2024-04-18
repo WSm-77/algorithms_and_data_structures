@@ -27,17 +27,6 @@ def turn_off(G):
 
     return turnOffOrder
 
-def matrix_to_linked_list(G):
-    V = len(G)
-
-    newG = [[] for _ in range(V)]
-    for vertex in range(V):
-        for neighbour in range(V):
-            if G[vertex][neighbour] == 1:
-                newG[vertex].append(neighbour)
-
-    return newG
-
 def check_solution(G, turnOffOrder):
     def is_connected():
         nonlocal G, V, turnedOff, turnedOffCnt
@@ -80,18 +69,13 @@ if __name__ == "__main__":
 
     ############# test 1 #############
 
-    graph4 = [
-        #0,1,2,3,4,5,6
-        [0,0,0,0,1,0,0], #0
-        [0,0,0,0,1,1,1], #1
-        [0,0,0,0,1,1,0], #2
-        [0,0,0,0,0,1,0], #3
-        [1,1,1,0,0,0,0], #4
-        [0,1,1,1,0,0,0], #5
-        [0,1,0,0,0,0,0]  #6
-             ]
-    
-    graph4 = matrix_to_linked_list(graph4)
+    graph4 = [[4],
+            [4, 5, 6],
+            [4, 5],
+            [5],
+            [0, 1, 2],
+            [1, 2, 3],
+            [1]]
     
     print("test1:")
     turnOffOrder = turn_off(graph4)
