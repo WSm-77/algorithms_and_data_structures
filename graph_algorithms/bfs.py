@@ -1,22 +1,24 @@
 from collections import deque
+import graphs
 
-
-def bfs(G, v):
+def bfs(G, vertex):
     V = len(G)
     distance = [0]*V
     visited = [False]*V
     parent = [None]*V
     toCheck = deque()
-    toCheck.append(v)
+    toCheck.append(vertex)
+    visited[vertex] = True
     
     while len(toCheck) > 0:
-        currVertex = toCheck.pop()
-        visited[currVertex] = True
-        for neighbour in G[currVertex]:
+        vertex = toCheck.popleft()
+        # print(f"vertex: {vertex}")
+        for neighbour in G[vertex]:
             if not visited[neighbour]:
                 toCheck.append(neighbour)
-                parent[neighbour] = currVertex
-                distance[neighbour] = distance[currVertex] + 1
+                visited[neighbour] = True
+                parent[neighbour] = vertex
+                distance[neighbour] = distance[vertex] + 1
     
     return visited, distance, parent
 
@@ -33,18 +35,23 @@ def print_way(parentsTab, vertex):
     print()
 
 if __name__ == "__main__":
-    graph1 = [[1,2],
-             [4],
-             [3,5],
-             [4],
-             [5],
-             [6],
-             [7],
-             []]
+
+    ########## test 1 ##########
     
-    visited, distance, parentsTab = bfs(graph1, 0)
+    print("test1:")
+    visited, distance, parentsTab = bfs(graphs.graph1_list, 0)
     print(visited)
     print(distance)
     print(parentsTab)
-    for vertex in range(len(graph1)):
+    for vertex in range(len(graphs.graph1_list)):
+        print_way(parentsTab, vertex)
+
+    ########## test 2 ##########
+    
+    print("\ntest2:")
+    visited, distance, parentsTab = bfs(graphs.graph18_list, 0)
+    print(visited)
+    print(distance)
+    print(parentsTab)
+    for vertex in range(len(graphs.graph18_list)):
         print_way(parentsTab, vertex)

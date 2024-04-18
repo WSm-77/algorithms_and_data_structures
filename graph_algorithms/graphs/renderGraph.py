@@ -50,6 +50,6 @@ def print_graph_from_list(graph: list[list[int]], name):
 
 if __name__ == "__main__":
     # select graph from graphs.py and call function for choosen implementation
-    print_graph_from_list(graphs.graph16_list, "graph16")
+    print_digraph_from_list(graphs.graph18_list, "graph18")
 
     # after running this file graph representation will be rendered
