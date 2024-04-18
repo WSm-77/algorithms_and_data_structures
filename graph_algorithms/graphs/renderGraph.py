@@ -1,6 +1,7 @@
 # this script converts representation of graph into .png file
 
 import graphviz
+import graphs
 
 def print_digraph_from_matrix(adj_matrix: list[list[int]], name):
     # Create a directed graph
@@ -48,16 +49,7 @@ def print_graph_from_list(graph: list[list[int]], name):
     g.render(f"{name}")
 
 if __name__ == "__main__":
-    # paste here graph reprezentation
-    graph15 =  [[1,2,3],
-                [0,2],
-                [0,1,4,5,6],
-                [0,4],
-                [2,3,6],
-                [2,6],
-                [2,4,5]]
-
-    # call function for choosen implementation
-    print_graph_from_list(graph15, "graph15")
+    # select graph from graphs.py and call function for choosen implementation
+    print_graph_from_list(graphs.graph16_list, "graph16")
 
     # after running this file graph representation will be rendered
