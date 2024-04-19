@@ -1,44 +1,55 @@
 from zad4testy import runtests
 
-def bin_search(L, elem):
-  beg = 0
-  end = len(L) - 1
+def get_number_of_verticies(edgesTab):
+  V = 0
+  for edge in edgesTab:
+    V = max(V, edge[1])
+  #end for
+  return V + 1
 
-  while beg <= end:
-    mid = (beg + end) // 2
-    if L[mid][0] < elem:
-      beg = mid + 1
-    else:
-      end = mid - 1
-    #end if
-  #end while
-  return beg
+def graph_to_matrix(edgesTab, V):
+  matrix = [[-1 for _ in range(V)] for _ in range(V)]
+  
+  for v, u, ceiling in edgesTab:
+    matrix[v][u] = matrix[u][v] = ceiling
+  #end for
 
+  return matrix
+  
 
 def Flight(L,x,y,t):
   # tu prosze wpisac wlasna implementacje
 
-  def rek(currentVertex, minCeiling, maxCeiling):
-    nonlocal L, y, t, n
-    if currentVertex == y:
+  def dfs_visit(vertex, minCeiling, maxCeiling):
+    nonlocal G, V, y, t
+    if vertex == y:
       return True
     
-    idx = bin_search(L, currentVertex)
-    while idx < n and L[idx][0] == currentVertex:
-      currentCeilling = L[idx][2]
-      newMaxCeiling = min(maxCeiling, currentCeilling + t)
-      newMinCeiling = max(minCeiling, currentCeilling - t)
-      if newMinCeiling <= newMaxCeiling:
-        if rek(L[idx][1], newMinCeiling,  newMaxCeiling):
-          return True
-      idx += 1
-    #end while
+    for neighbour in range(V):
+      currentCeiling = G[vertex][neighbour]
+      if 0 <= currentCeiling:
+        newMinCeiling = max(minCeiling, currentCeiling - t)
+        newMaxCeiling = min(maxCeiling, currentCeiling + t)
+        if newMinCeiling <= newMaxCeiling:
+          G[vertex][neighbour] = G[neighbour][vertex] = -currentCeiling
+          if dfs_visit(neighbour, newMinCeiling, newMaxCeiling):
+            return True
+    #end if
+
     return False
   #end def
 
-  n = len(L)
+  V = get_number_of_verticies(L)
+  G = graph_to_matrix(L, V)
 
-  return rek(x, -float("inf"), float("inf"))
+  for neighbour in range(V):
+    if G[x][neighbour] > 0:
+      minCeiling = 0
+      maxCeiling = float("inf")
+      if dfs_visit(neighbour, minCeiling, maxCeiling):
+        return True
+
+  return False
 
 # zmien all_tests na True zeby uruchomic wszystkie testy
 runtests( Flight, all_tests = True )
