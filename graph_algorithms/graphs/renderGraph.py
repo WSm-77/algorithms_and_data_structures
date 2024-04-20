@@ -48,8 +48,24 @@ def print_graph_from_list(graph: list[list[int]], name):
 
     g.render(f"{name}")
 
+def print_graph_with_lables_from_list(graph: list[list[tuple[int, int]]], name):
+    g = graphviz.Graph(format="png")
+
+    for v in range(len(graph)):
+        g.node(str(v))
+
+    edges = []
+
+    for vertex in range(len(graph)):
+        for neighbour, cost in graph[vertex]:
+            if (neighbour, vertex) not in edges:
+                edges.append((vertex, neighbour))
+                g.edge(str(vertex), str(neighbour), str(cost))
+
+    g.render(f"{name}")
+
 if __name__ == "__main__":
     # select graph from graphs.py and call function for choosen implementation
-    print_digraph_from_list(graphs.graph18_list, "graph18")
+    print_graph_with_lables_from_list(graphs.graph20_list_weights, "graph20_weights")
 
     # after running this file graph representation will be rendered
