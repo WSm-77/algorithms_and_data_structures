@@ -23,20 +23,16 @@ def dijkstra(G: list[list[tuple[int, int]]], vertex):
     parent = [None]*V
     distance = [float("inf")]*V
     toCheck = PriorityQueue()
-    toCheck.put((0, vertex))
+    toCheck.put(vertex)
     distance[vertex] = 0
 
     while not toCheck.empty():
-        currDistance, currVertex = toCheck.get()
-        if distance[currVertex] < currDistance:
-            continue
-        #end if
-
+        currVertex = toCheck.get()
         for neighbour, cost in G[currVertex]:
             if distance[currVertex] + cost < distance[neighbour]:
                 parent[neighbour] = currVertex
                 distance[neighbour] = distance[currVertex] + cost
-                toCheck.put((distance[neighbour], neighbour))
+                toCheck.put(neighbour)
             #end if
         #end for
     #end while
@@ -46,7 +42,7 @@ def dijkstra(G: list[list[tuple[int, int]]], vertex):
 if __name__ == "__main__":
 
     ########## test 1 ##########
-    
+
     print("test1:")
     start = 0
     testGraph = graphs.graph19_list_weights
@@ -57,7 +53,7 @@ if __name__ == "__main__":
 
 
     ########## test 2 ##########
-    
+
     print("\ntest2:")
     start = 0
     testGraph = graphs.graph20_list_weights
