@@ -66,6 +66,6 @@ def print_graph_with_lables_from_list(graph: list[list[tuple[int, int]]], name):
 
 if __name__ == "__main__":
     # select graph from graphs.py and call function for choosen implementation
-    print_graph_with_lables_from_list(graphs.graph20_list_weights, "graph20_weights")
+    print_graph_with_lables_from_list(graphs.graph19_list_weights_modified, "graph19_weights_modified")
 
     # after running this file graph representation will be rendered
