@@ -2,7 +2,7 @@
 
 import sys
 from random import randint
-sys.path.insert(0, '/home/wiktor/university/ASD/exercises')
+sys.path.insert(0, '../')
 from usefullFunctions import Node, list_to_linked_list, remove_guradian, print_list
 
 
