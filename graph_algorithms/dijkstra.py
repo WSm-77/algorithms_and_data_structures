@@ -23,16 +23,19 @@ def dijkstra(G: list[list[tuple[int, int]]], vertex):
     parent = [None]*V
     distance = [float("inf")]*V
     toCheck = PriorityQueue()
-    toCheck.put(vertex)
+    toCheck.put((0, vertex))
     distance[vertex] = 0
 
     while not toCheck.empty():
-        currVertex = toCheck.get()
+        currentDistance, currVertex = toCheck.get()
+        if currentDistance > distance[currVertex]:
+            continue
+
         for neighbour, cost in G[currVertex]:
             if distance[currVertex] + cost < distance[neighbour]:
                 parent[neighbour] = currVertex
                 distance[neighbour] = distance[currVertex] + cost
-                toCheck.put(neighbour)
+                toCheck.put((distance[neighbour] ,neighbour))
             #end if
         #end for
     #end while
