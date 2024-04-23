@@ -49,8 +49,11 @@ def spacetravel( n, E, S, a, b ):
 
     while not toVisit.empty():
         distance, vertex = toVisit.get()
+        
         if distance > distances[vertex]:
             continue
+        elif vertex == b:
+            return distances[b]
 
         for neighbour, cost in G[vertex]:
             if distance + cost < distances[neighbour]:
