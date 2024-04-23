@@ -1,3 +1,12 @@
+# Wiktor Sędzimir
+# 
+# Opis algorytmu:
+# Ideą algorytmu jest zamiana grafu w postaci listy krawędzi na listę sąsiedztwa i następnie dodanie dodatkowych krawędzi łączących
+# planety znajdujące się koło osobliwości z kosztem przejścia przez taką krawędź wynoszącym 0. Następnie korzystamy z algorytmu 
+# Dijkstry do znalezienia najkrótszej ścieżki pomiędzy wierzchołkami a i b. Algorytm ma złożoność O( V^2 log V ), ponieważ dodanie
+# kolejnych krawędzi może spowodować powstanie grafu pełnego, w którym liczba krawędzi jest rzędu V^2, natomiast złożoność czasowa
+# algorymu Dijkstry jest rzędu E log V.
+
 from zad5testy import runtests
 from queue import PriorityQueue
 
@@ -33,7 +42,6 @@ def spacetravel( n, E, S, a, b ):
     V = n
 
     G = edges_to_graph(E, V, S)
-    # print(*G, sep="\n")
     distances = [float("inf")]*V
     toVisit = PriorityQueue()
     toVisit.put((0, a))
@@ -41,6 +49,8 @@ def spacetravel( n, E, S, a, b ):
 
     while not toVisit.empty():
         distance, vertex = toVisit.get()
+        if distance > distances[vertex]:
+            continue
 
         for neighbour, cost in G[vertex]:
             if distance + cost < distances[neighbour]:
