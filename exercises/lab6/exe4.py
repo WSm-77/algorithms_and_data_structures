@@ -1,11 +1,12 @@
 # znaleźć ścieżkę pomiędzy wierzchołkami x i y, na której najmniejsza waga krawędzi jest jak największa
 
-# algorytm pascala/kaskala ? 
-# rodzina zbiorów rozłącznych
+############
+# sposób 1 #
+############
 
-# sortujemy krawędzie po wagach a następnie ustalamy najmniejszą wagę jako wartość środkową z tej tablicy i dfs'em sprawdzamy czy 
-# istnieje ścieżka zawierająca same wagi nie mniejsze niż ta środkowa wartość; następnie postępując zgodnie z ideą binary sercha 
-# znajdujemy najmniejszą wagę 
+# sortujemy krawędzie po wagach a następnie łączymy ze sobą wierzchołki pomiędzy którymi znajduje się krawędź o aktualnie
+# największej wadze; po każdym dodaniu krawędzi sprawdzamy czy wierzchołki x i y są ze sobą połączone; jeżeli tak, to zwracamy
+# ostatnią dodaną wagę
 # Złożoność: O(E logE) ~ O(E log V^2) ~ O(E log V)
 
 import sys
@@ -75,7 +76,57 @@ def max_minimal_weight(G, beg, end):
 
     print("smth gone wrong...")
     return (result, [])
-    
+
+############
+# sposób 2 #
+############
+
+# Korzystamy z algorytmu Dijikstry, jednakże tym razem zamiast sprawdzać minimalny koszt dotarcia do wierzchołka sprawezamy
+# maksymalną wagę minimalnej krawędzi; z kolejki priorytetowej wyjmujemy więc wierzchołki, dla których aktualna maksymalna waga
+# minimalnej krawędzi jest jak największa 
+
+from queue import PriorityQueue
+
+def print_path(parent, destination):
+    def rek(vertex):
+        nonlocal parent
+        if parent[vertex] == None:
+            print(f"{vertex}", end="")
+        else:
+            rek(parent[vertex])
+            print(f" -> {vertex}", end="")
+    #end def
+    rek(destination)
+    print()
+
+# Note: we use negative values while adding to PriorityQueue to make it return elements with lowest priority
+def max_minimal_weight2(G, beg, end):
+    INF = float("inf")
+    V = len(G)
+    maxMinWeight = [0]*V
+    parent = [None]*V
+    toCheck = PriorityQueue()
+    toCheck.put((-INF, beg))
+    maxMinWeight[beg] = INF
+
+    while not toCheck.empty():
+        currentMaxMinWeight, vertex = toCheck.get()
+        currentMaxMinWeight = -currentMaxMinWeight
+
+        if vertex == end:
+            break
+
+        for neighbour, weight in G[vertex]:
+            newMaxMinWeight = min(currentMaxMinWeight, weight)
+            if newMaxMinWeight > maxMinWeight[neighbour]:
+                maxMinWeight[neighbour] = newMaxMinWeight
+                toCheck.put((-newMaxMinWeight, neighbour))
+                parent[neighbour] = vertex
+        #end for
+    #end while
+
+    return maxMinWeight[end], parent
+
 
 if __name__ == "__main__":
     graph19_list_weights_modified = [[(1, 2), (2, 3), (3, 7), (4, 12)],
@@ -90,6 +141,12 @@ if __name__ == "__main__":
     beg = 0
     end = 5
     minWeight, path = max_minimal_weight(graph19_list_weights_modified, beg, end)
+    print("solution 1:")
     print(f"min weight: {minWeight}")
     print("path: ", end="")
     print(*path, sep=" -> ")
+
+    print("\nsolution 2:")
+    minWeight, parent = max_minimal_weight2(graph19_list_weights_modified, beg, end)
+    print(f"min weight: {minWeight}")
+    print_path(parent, end)
