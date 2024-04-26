@@ -3,20 +3,6 @@
 from queue import PriorityQueue
 import graphs
 
-def print_way(parent, vertex):
-    def rek(vertex):
-        nonlocal parent
-        if parent[vertex] == None:
-            print(f"{vertex}", end="")
-            return
-        
-        rek(parent[vertex])
-        print(f" -> {vertex}", end="")
-    #end def
-    
-    rek(vertex)
-    print()
-
 # G[vertex][neighbourIdx] = (neighbour, cost: vertex -> neighbour)
 def dijkstra(G: list[list[tuple[int, int]]], vertex):
     V = len(G)
@@ -42,25 +28,21 @@ def dijkstra(G: list[list[tuple[int, int]]], vertex):
 
     return distance, parent
 
+def test(start, testGraph):
+    distance, parent = dijkstra(testGraph, start)
+    print(distance)
+    for vertex in range(len(testGraph)):
+        graphs.print_way(parent, vertex)
+
 if __name__ == "__main__":
 
     ########## test 1 ##########
 
     print("test1:")
-    start = 0
-    testGraph = graphs.graph19_list_weights
-    distance, parent = dijkstra(testGraph, start)
-    print(distance)
-    for vertex in range(len(testGraph)):
-        print_way(parent, vertex)
+    test(0, graphs.graph19_list_weights)
 
 
     ########## test 2 ##########
 
     print("\ntest2:")
-    start = 0
-    testGraph = graphs.graph20_list_weights
-    distance, parent = dijkstra(testGraph, start)
-    print(distance)
-    for vertex in range(len(testGraph)):
-        print_way(parent, vertex)
+    test(0, graphs.graph20_list_weights)
