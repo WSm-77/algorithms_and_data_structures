@@ -60,6 +60,20 @@ def list_to_weighted_edges(G):
 
     return edges
 
+def list_to_weighted_matrix(G: list[list[int]]):
+    V = len(G)
+    INF = float("inf")
+    matrix = [[INF for _ in range(V)] for _ in range(V)]
+
+    for i in range(V):
+        matrix[i][i] = 0
+    
+    for vertex in range(V):
+        for neighbour, weight in G[vertex]:
+            matrix[vertex][neighbour] = weight
+
+    return matrix
+
 def print_way(parent, vertex):
     def rek(vertex):
         nonlocal parent
@@ -73,6 +87,18 @@ def print_way(parent, vertex):
     
     rek(vertex)
     print()
+
+def get_way(parent, vertex):
+    way = []
+
+    while vertex != None:
+        way.append(vertex)
+        vertex = parent[vertex]
+    #end while
+    
+    way.reverse()
+    
+    return way
 
 def get_number_of_verticies(edges):
     V = 0
@@ -295,26 +321,19 @@ graph19_list_weights = [[(1, 2), (2, 3), (3, 7), (4, 12)],
                         [(0, 2), (2, 4), (5, 2)],
                         [(0, 3), (1, 4), (4, 2), (5, 9), (6, 5)],
                         [(0, 7), (4, 5)],
-                        [(2, 2), (3, 5), (6, 3)],
-                        [(2, 9), (6, 1)],
+                        [(0, 12), (2, 2), (3, 5), (6, 3)],
+                        [(1, 2), (2, 9), (6, 1)],
                         [(2, 5), (4, 3), (5, 1)]]
 
-graph19_edges_weights = [(0, 1, 2), (0, 2, 3), (0, 3, 7), (0, 4, 12), (1, 0, 2), (1, 2, 4), (1, 5, 2), (2, 0, 3), 
-                         (2, 1, 4), (2, 4, 2), (2, 5, 9), (2, 6, 5), (3, 0, 7), (3, 4, 5), (4, 2, 2), (4, 3, 5), 
-                         (4, 6, 3), (5, 2, 9), (5, 6, 1), (6, 2, 5), (6, 4, 3), (6, 5, 1)]
+
 
 graph19_list_weights_modified = [[(1, 2), (2, 3), (3, 7), (4, 12)],
                                 [(0, 2), (2, 4), (5, 2)],
                                 [(0, 3), (1, 4), (4, 2), (5, 9), (6, 5)],
                                 [(0, 7), (4, 5)],
-                                [(2, 2), (3, 5), (6, 4)],
-                                [(2, 9), (6, 1)],
+                                [(0, 12), (2, 2), (3, 5), (6, 4)],
+                                [(1, 2), (2, 9), (6, 1)],
                                 [(2, 5), (4, 4), (5, 1)]]
-
-graph19_edges_weights_modified = [(0, 1, 2), (0, 2, 3), (0, 3, 7), (0, 4, 12), (1, 0, 2), (1, 2, 4), (1, 5, 2), 
-                                  (2, 0, 3), (2, 1, 4), (2, 4, 2), (2, 5, 9), (2, 6, 5), (3, 0, 7), (3, 4, 5), 
-                                  (4, 2, 2), (4, 3, 5), (4, 6, 4), (5, 2, 9), (5, 6, 1), (6, 2, 5), (6, 4, 4), 
-                                  (6, 5, 1)]
 
 graph19_list_weights_modified2 = [[(1, 2), (3, 7), (4, 12)],
                                   [(5, 2)],
@@ -328,10 +347,10 @@ graph20_list_weights = [[(1, 1), (2, 2)],
                         [(0, 1), (3, 3), (4, 2)],
                         [(0, 2), (3, 1), (6, 7)],
                         [(1, 3), (2, 1), (5, 2), (7, 3)],
-                        [(7, 5)],
+                        [(1, 2), (7, 5)],
                         [(3, 3), (6, 1), (8, 8)],
                         [(2, 7), (5, 1), (8, 4)],
-                        [(3, 2), (4, 5), (8, 1)],
+                        [(3, 3), (4, 5), (8, 1)],
                         [(5, 8), (6, 4), (7, 1)]]
 
 graph20_edges_weights = [(0, 1, 1), (0, 2, 2), (1, 0, 1), (1, 3, 3), (1, 4, 2), (2, 0, 2), (2, 3, 1), (2, 6, 7), (3, 1, 3), 
