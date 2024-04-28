@@ -9,6 +9,19 @@ def matrix_to_list(G):
 
     return newG
 
+def matrix_to_weighted_list(G):
+    V = len(G)
+
+    newG = [[] for _ in range(V)]
+    for vertex in range(V):
+        for neighbour in range(V):
+            if vertex == neighbour:
+                continue
+            if G[vertex][neighbour] != float("inf"):
+                newG[vertex].append((neighbour, G[vertex][neighbour]))
+
+    return newG
+
 def edges_to_digraph(edges):
     V = 0
     for edge in edges:
@@ -447,3 +460,22 @@ graph24_list = [[(1, 4), (7, 5), (6, 8)],
                 [(7, 20), (4, 9)]]
 
 graph24_verticies_costs = [5, 7, 3, 5, 2, 1, 8, 10, 6]
+
+K1 = [
+    [1,   4,   2],
+    [0.2, 1,   0.5],
+    [0.5, 2, 1]
+    ]
+
+K2 = [
+    [1, 0.2,   0.1],
+    [3, 1,     0.2],
+    [9, 5,     1]
+    ]
+
+K3 = [
+    [1,  0.2, 0.1, 1],
+    [3,  1,   0.2, 2],
+    [9,  5,   1,   4],
+    [1,  0.2, 0.1, 1]
+    ]
