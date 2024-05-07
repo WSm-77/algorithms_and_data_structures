@@ -5,8 +5,8 @@
 # przy uwzględnieniu, czy do wirzchołka wchodzimy wykorzystując dwumilowe buty czy też nie (rozróżniamy to w tablicy
 # distances). Do kolejki priorytetowej dodajemy dodatkowe informacje o poprzednim koszcie podróży, dystansie poprzedniego
 # wierzchołka oraz czy do dotarcia do poprzedniego wierzchołka skorzystano z butów, po to aby móc rozważać kiedy warto
-# użyć dwumilowych butów. Algorytm ma złożoność O(V^2 log V), ponieważ korzysta z algorymu dijkstry dla macierzy, który
-# wykorzystuje kolejkę priorytetową
+# użyć dwumilowych butów. Algorytm ma złożoność O(E log V), ponieważ korzysta z algorymu dijkstry dla reprezentacji 
+# wykorzystującje listę sąsiedztwa.
 
 from zad6testy import runtests
 from queue import PriorityQueue
@@ -14,23 +14,17 @@ from queue import PriorityQueue
 # definicja stałej globalnej
 INF = float("inf")
 
-def find_not_visited_min_distance(distances, visited, V):
-    minDistance = INF
-    minVertex = None
-    bootsUsage = 0
+def matrix_to_list(G):
+    V = len(G)
+    graph = [[] for _ in range(V)]
 
     for vertex in range(V):
-        if not visited[vertex][0] and distances[vertex][0] < minDistance:
-            minDistance = distances[vertex][0]
-            minVertex = vertex
-            bootsUsage = 0
+        for neighbour in range(V):
+            cost = G[vertex][neighbour]
+            if cost > 0:
+                graph[vertex].append((neighbour, cost))
 
-        if not visited[vertex][1] and distances[vertex][1] < minDistance:
-            minDistance = distances[vertex][1]
-            minVertex = vertex
-            bootsUsage = 1
-    
-    return minDistance, minVertex, bootsUsage
+    return graph
 
 def jumper( G, s, w ):
     # tu prosze wpisac wlasna implementacje
@@ -44,14 +38,16 @@ def jumper( G, s, w ):
     toCheck = PriorityQueue()
     toCheck.put((0, s, 0, INF, INF, 1))
 
+    G = matrix_to_list(G)
+
     while not toCheck.empty():
         currentDistance, minVertex, bootsUsage, prevDistance, prevCost, prevBootsUsage = toCheck.get()
 
         if currentDistance < distances[minVertex][bootsUsage]:
             distances[minVertex][bootsUsage] = currentDistance
 
-        for neighbour in range(V):
-            travelCost = G[minVertex][neighbour]
+        for neighbourIdx in range(len(G[minVertex])):
+            neighbour, travelCost = G[minVertex][neighbourIdx]
             if travelCost > 0:
                 newDistance = currentDistance + travelCost
                 if newDistance < distances[neighbour][0]:
