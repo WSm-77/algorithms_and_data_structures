@@ -45,19 +45,19 @@ def jumper( G, s, w ):
 
         if currentDistance < distances[minVertex][bootsUsage]:
             distances[minVertex][bootsUsage] = currentDistance
-
-        for neighbourIdx in range(len(G[minVertex])):
-            neighbour, travelCost = G[minVertex][neighbourIdx]
-            if travelCost > 0:
+            for neighbourIdx in range(len(G[minVertex])):
+                neighbour, travelCost = G[minVertex][neighbourIdx]
                 newDistance = currentDistance + travelCost
                 if newDistance < distances[neighbour][0]:
                     toCheck.put((newDistance, neighbour, 0, currentDistance, travelCost, bootsUsage))
-            
-                if not bootsUsage and not prevBootsUsage:
-                    bootsTravelCost = max(travelCost, prevCost)
-                    bootsNewDistance = prevDistance + bootsTravelCost
-                    if bootsNewDistance < distances[neighbour][1]:
-                        toCheck.put((bootsNewDistance, neighbour, 1, INF, INF, 0))
+
+        if not bootsUsage and not prevBootsUsage:
+            for neighbourIdx in range(len(G[minVertex])):
+                neighbour, travelCost = G[minVertex][neighbourIdx]
+                bootsTravelCost = max(travelCost, prevCost)
+                bootsNewDistance = prevDistance + bootsTravelCost
+                if bootsNewDistance < distances[neighbour][1]:
+                    toCheck.put((bootsNewDistance, neighbour, 1, INF, INF, 0))
 
 
     return min(distances[w][0], distances[w][1])
