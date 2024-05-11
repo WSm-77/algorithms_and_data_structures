@@ -62,7 +62,7 @@ def dijkstra_matrix(G: list[list[tuple[int, int | float]]], beg):
     parents = [None]*V
     relaxed = [False]*V
 
-    # we have to relax all verticies only ones
+    # we have to relax all verticies only once
     for _ in range(V):
 
         # find not relaxed vertex with smalest distance to "beg"
@@ -84,7 +84,7 @@ def dijkstra_matrix(G: list[list[tuple[int, int | float]]], beg):
             cost = G[vertexToRelax][neighbour]
 
             # check if edge between vertexToRelax and neighbour exists
-            if cost >= 0:
+            if cost != INF:
                 newDistance = distances[vertexToRelax] + cost
                 if newDistance < distances[neighbour]:
                     distances[neighbour] = newDistance
