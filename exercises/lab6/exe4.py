@@ -129,6 +129,8 @@ def max_minimal_weight2(G, beg, end):
 
 
 if __name__ == "__main__":
+    print("######### test 1 #########\n\n")
+
     graph19_list_weights_modified = [[(1, 2), (2, 3), (3, 7), (4, 12)],
                                      [(0, 2), (2, 4), (5, 2)],
                                      [(0, 3), (1, 4), (4, 2), (5, 9), (6, 5)],
@@ -149,4 +151,46 @@ if __name__ == "__main__":
     print("\nsolution 2:")
     minWeight, parent = max_minimal_weight2(graph19_list_weights_modified, beg, end)
     print(f"min weight: {minWeight}")
+    print("path: ", end="")
+    print_path(parent, end)
+
+    print("\n\n######### test 2 #########\n\n")
+
+    graph20_list_weights = [[(1, 1), (2, 2)],
+                            [(0, 1), (3, 3), (4, 2)],
+                            [(0, 2), (3, 1), (6, 7)],
+                            [(1, 3), (2, 1), (5, 2), (7, 3)],
+                            [(1, 2), (7, 5)],
+                            [(3, 2), (6, 1), (8, 8)],
+                            [(2, 7), (5, 1), (8, 4)],
+                            [(3, 3), (4, 5), (8, 1)],
+                            [(5, 8), (6, 4), (7, 1)]]
+    beg = 1
+    end = 8
+    minWeight, path = max_minimal_weight(graph20_list_weights, beg, end)
+    print("solution 1:")
+    print(f"min weight: {minWeight}")
+    print("path: ", end="")
+    print(*path, sep=" -> ")
+
+    print("\nsolution 2:")
+    minWeight, parent = max_minimal_weight2(graph20_list_weights, beg, end)
+    print(f"min weight: {minWeight}")
+    print("path: ", end="")
+    print_path(parent, end)
+
+    print("\n\n######### test 3 #########\n\n")
+
+    beg = 4
+    end = 6
+    minWeight, path = max_minimal_weight(graph20_list_weights, beg, end)
+    print("solution 1:")
+    print(f"min weight: {minWeight}")
+    print("path: ", end="")
+    print(*path, sep=" -> ")
+
+    print("\nsolution 2:")
+    minWeight, parent = max_minimal_weight2(graph20_list_weights, beg, end)
+    print(f"min weight: {minWeight}")
+    print("path: ", end="")
     print_path(parent, end)
