@@ -41,23 +41,13 @@ def magic( C ):
         if maxGold[i] == -1:
             continue
 
-        gold, door1, door2, door3 = C[i]
+        gold = C[i][0]
         currentGold = maxGold[i]
-
-        # can we go through door1
-        if door1[1] > i and can_open(currentGold, gold, door1[0]):
-            nextGold = next_gold(currentGold, gold, door1[0])
-            maxGold[door1[1]] = max(maxGold[door1[1]], nextGold)
-
-        # can we go through door2
-        if door2[1] > i and can_open(currentGold, gold, door2[0]):
-            nextGold = next_gold(currentGold, gold, door2[0])
-            maxGold[door2[1]] = max(maxGold[door2[1]], nextGold)
-
-        # can we go through door3
-        if door3[1] > i and can_open(currentGold, gold, door3[0]):
-            nextGold = next_gold(currentGold, gold, door3[0])
-            maxGold[door3[1]] = max(maxGold[door3[1]], nextGold)
+        for doorId in range(1, 4):
+            door = C[i][doorId]
+            if door[1] > i and can_open(currentGold, gold, door[0]):
+                nextGold = next_gold(currentGold, gold, door[0])
+                maxGold[door[1]] = max(maxGold[door[1]], nextGold)
 
     return maxGold[n - 1]
 
