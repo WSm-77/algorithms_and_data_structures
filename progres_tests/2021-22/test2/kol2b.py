@@ -1,4 +1,5 @@
 from kol2btesty import runtests
+import heapq
 
 class Parking:
     def __init__(self, distance, cost) -> None:
@@ -7,18 +8,33 @@ class Parking:
 
     def __repr__(self) -> str:
         return f"P({self.distance}, {self.cost})"
+    
+def get_min_cost_and_update_heap(heap, prevDistance):
+        mini = heap[0]
+        miniCost, miniDistance = mini
+
+        while heap:
+            if miniDistance >= prevDistance:
+                break
+            else:
+                heapq.heappop(heap)
+                mini = heap[0]
+                miniCost, miniDistance = mini
+        
+        return miniCost
 
 def min_cost( O, C, T, L ):
     # tu prosze wpisac wlasna implementacje
 
     n = len(O)
-    INF = float("inf")
 
     if L <= T:
         return 0
 
     parkingTab = [Parking(O[i], C[i]) for i in range(n)]
     parkingTab.append(Parking(L, 0))
+    parkingTab.append(Parking(0, 0))
+
     parkingTab.sort(key=lambda x: x.distance)
 
     n = len(parkingTab)
@@ -32,37 +48,33 @@ def min_cost( O, C, T, L ):
     # minimalny koszt dotarcia do i-tego parkingu korzystając z wyjątku w ostatnim ruchu
     h = [None for _ in range(n)]
 
+    gHeap = []
+    hHeap = []
+    fHeap = []
+
     i = 0
     while i < n and parkingTab[i].distance <= T:
         f[i] = g[i] = h[i] = 0
+        gHeap.append((parkingTab[i].cost, parkingTab[i].distance))
+        hHeap.append((parkingTab[i].cost, parkingTab[i].distance))
+        fHeap.append((parkingTab[i].cost, parkingTab[i].distance))
         i += 1
 
+    heapq.heapify(gHeap)
+    heapq.heapify(hHeap)
+    heapq.heapify(fHeap)
+
     for parkingIdx in range(i, n):
-        prevParkingIdx = parkingIdx - 1
-
-        # parkings in range {1,..,T}
         prevDistance = parkingTab[parkingIdx].distance - T
-        gMini = INF
-        hMini = INF
-        fMini = INF
-        while 0 <= prevParkingIdx and  parkingTab[prevParkingIdx].distance >= prevDistance:
-            gMini = min(gMini, g[prevParkingIdx] + parkingTab[prevParkingIdx].cost)
-            hMini = min(hMini, g[prevParkingIdx] + parkingTab[prevParkingIdx].cost)
-            fMini = min(fMini, f[prevParkingIdx] + parkingTab[prevParkingIdx].cost)
-            prevParkingIdx -= 1
-        g[parkingIdx] = gMini
+        prevDistanceException = parkingTab[parkingIdx].distance - 2*T
 
-        # parkings in range {T,..,2T}
-        prevDistance = parkingTab[parkingIdx].distance - 2*T
-        if prevDistance < 0:
-            hMini = 0
-        else:
-            while 0 <= prevParkingIdx and parkingTab[prevParkingIdx].distance >= prevDistance:
-                hMini = min(hMini, g[prevParkingIdx] + parkingTab[prevParkingIdx].cost)
-                prevParkingIdx -= 1
-        
-        h[parkingIdx] = hMini
-        f[parkingIdx] = min(fMini, hMini)
+        g[parkingIdx] = get_min_cost_and_update_heap(gHeap, prevDistance)
+        h[parkingIdx] = get_min_cost_and_update_heap(hHeap, prevDistanceException)
+        f[parkingIdx] = min(get_min_cost_and_update_heap(fHeap, prevDistance), h[parkingIdx])
+
+        heapq.heappush(gHeap, (g[parkingIdx] + parkingTab[parkingIdx].cost, parkingTab[parkingIdx].distance))
+        heapq.heappush(hHeap, (g[parkingIdx] + parkingTab[parkingIdx].cost, parkingTab[parkingIdx].distance))
+        heapq.heappush(fHeap, (f[parkingIdx] + parkingTab[parkingIdx].cost, parkingTab[parkingIdx].distance))
 
     return f[-1]
 
