@@ -11,7 +11,7 @@
 
 import sys
 
-sys.path.insert(0, "../../typical_algorithms")
+sys.path.insert(0, "../../data_structures")
 from disjointSets import DisjointSet
 
 def get_path(G, sets: DisjointSet, beg, end, weight):
