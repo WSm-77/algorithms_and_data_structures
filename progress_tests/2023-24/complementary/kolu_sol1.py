@@ -1,7 +1,14 @@
-from kolutesty import runtests
-from collections import deque
+# Opis algorytmu:
+# Rozwiązaniem zadania jest znalezienie najdłuższej ścieżki w DAGu, w którym zależności pomiędzy projektami są krawędziami.
+# Definiujemy funkcję distance(vertex) - najdłuższa ścieżka w DAGu, kończąca się w wierzchołku "vertex". Aby wyznaczyć
+# wartość tej funkcji musimy znaleźć najdłuższą ścieżkę prowadzącą, do każdego z wierzchołków, z których możemy dostać
+# się do wierzchołka "vertex" a następnie przedłużyć ją o jedną krawędź.
+# Złożoność obliczeniowa:
+# O(n + m), gdzie n - liczba projektów, m - liczba zależności
 
-def create_graph(V: int, edges: list[tuple]):
+from kolutesty import runtests
+
+def create_reversed_graph(V: int, edges: list[tuple]):
   reversedGraph = [[] for _ in range(V)]
 
   for neighbour, vertex in edges:
@@ -24,7 +31,7 @@ def projects(n, L):
   #end def
 
   V = n
-  reversedGraph = create_graph(n, L)
+  reversedGraph = create_reversed_graph(n, L)
 
   visited = [False]*V
   distances = [1 for _ in range(V)]
