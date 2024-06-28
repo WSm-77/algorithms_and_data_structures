@@ -13,6 +13,9 @@ def prim_list(G, root):
     while not toCheck.empty():
         _, vertex = toCheck.get()
 
+        if visited[vertex]:
+            continue
+
         visited[vertex] = True
 
         for neighbour, weight in G[vertex]:
