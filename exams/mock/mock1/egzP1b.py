@@ -21,7 +21,7 @@ def edges_to_graph(edges):
     for vertex, neighobur, cost in edges:
         graph[vertex].append((neighobur, cost))
         graph[neighobur].append((vertex, cost))
-    
+
     return graph
 
 def turysta( G, D, L ):
@@ -32,7 +32,7 @@ def turysta( G, D, L ):
     graph = edges_to_graph(G)
     V = len(graph)
     INF = float("inf")
-    
+
     # distance[vertex][visitedIdx] - distance from source to vertex it is visitedIdx-th vertex visited
     distances = [[INF for _ in range(5)] for _ in range(V)]
     distances[source][0] = 0
@@ -50,7 +50,7 @@ def turysta( G, D, L ):
                 break
             else:
                 continue
-        
+
         for neighbour, cost in graph[vertex]:
             newVisitedIdx = visitedIdx + 1
             newDist = currDist + cost
