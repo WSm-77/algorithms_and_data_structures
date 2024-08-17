@@ -67,6 +67,25 @@ def print_graph_with_lables_from_list(graph: list[list[tuple[int, int]]], name, 
 
     g.render(f"{name}")
 
+def print_graph_with_verticies_lables_from_list(graph: list[list[tuple[int, int]]], name, vertexLable: list = None):
+    g = graphviz.Graph(format="png")
+
+    for v in range(len(graph)):
+        if vertexLable == None:
+            g.node(str(v))
+        else:
+            g.node(str(v), label=f"{v}\n{vertexLable[v]}")
+
+    edges = set()
+
+    for vertex in range(len(graph)):
+        for neighbour in graph[vertex]:
+            if (neighbour, vertex) not in edges:
+                edges.add((vertex, neighbour))
+                g.edge(str(vertex), str(neighbour))
+
+    g.render(f"{name}")
+
 def print_digraph_with_lables_from_list(graph: list[list[tuple[int, int]]], name, vertexLable: list = None):
     g = graphviz.Digraph(format="png")
 
@@ -85,8 +104,28 @@ def print_digraph_with_lables_from_list(graph: list[list[tuple[int, int]]], name
 
     g.render(f"{name}")
 
+def print_digraph_with_verticies_lables_from_list(graph: list[list[int]], name, vertexLable: list = None):
+    g = graphviz.Digraph(format="png")
+
+    for v in range(len(graph)):
+        if vertexLable == None:
+            g.node(str(v))
+        else:
+            g.node(str(v), label=f"id: {v}\nfun: {vertexLable[v]}")
+
+    edges = set()
+
+    for vertex in range(len(graph)):
+        for neighbour in graph[vertex]:
+            edges.add((vertex, neighbour))
+            g.edge(str(vertex), str(neighbour))
+
+    g.render(f"{name}")
+
 if __name__ == "__main__":
     # select graph from graphs.py and call function for choosen implementation
-    print_digraph_with_lables_from_list(graphs.graph19_list_weights_modified2, "graph19_weights_modified2")
+
+    graph = graphs.edges_to_graph_with_cost(graphs.graph31_edges)
+    print_graph_with_lables_from_list(graph, "graph31")
 
     # after running this file graph representation will be rendered
