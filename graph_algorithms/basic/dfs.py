@@ -20,11 +20,10 @@ def dfs(G: list[list[int]]):
     processTime = [-1]*V
     time = 0
 
-
     for vertex in range(V):
         if not visited[vertex]:
             dfs_visit(vertex)
-    
+
     return visited, visitTime, processTime
 
 if __name__ == "__main__":
@@ -36,7 +35,7 @@ if __name__ == "__main__":
              [6],
              [7],
              []]
-    
+
     print("graph 1:")
     visited, visitTime, processTime = dfs(graph1)
     print(visited)
@@ -50,7 +49,7 @@ if __name__ == "__main__":
             [],
             [3,4],
             [5]]
-    
+
     print("graph 2:")
     visited, visitTime, processTime = dfs(graph2)
     print(visited)

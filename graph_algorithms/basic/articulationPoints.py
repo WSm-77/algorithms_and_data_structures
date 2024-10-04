@@ -1,5 +1,7 @@
 # Find bridges in graph
 
+import sys
+sys.path.insert(0, "../")
 import graphs
 
 def articulation_points(G):
@@ -46,11 +48,11 @@ def articulation_points(G):
 if __name__ == "__main__":
 
     ########### test 1 ###########
-    
+
     articulationPoints = articulation_points(graphs.graph4_list)
     print(articulationPoints)
 
     ########### test 2 ###########
-    
+
     articulationPoints = articulation_points(graphs.graph16_list)
     print(articulationPoints)

@@ -67,7 +67,7 @@ def find_euler_cycle(G) -> list[int]:
 
     visitedEdges[0][0] = True
     dfs_visit(G[0][0], 0)
-    
+
     # print(*visitedEdges, sep="\n")
 
     return eulerCycle
@@ -84,7 +84,7 @@ if __name__ == "__main__":
                [5,1,2,3],
                [2,3,1,4],
                [1,2]]
-    
+
     print("test1:")
     if is_eulerian(graph12):
         print("graph12 is Eulerian\nEuler Cycle:")
@@ -99,7 +99,7 @@ if __name__ == "__main__":
                [1,3],
                [2,4],
                [0,1,3]]
-    
+
     print("\ntest2:")
     if is_eulerian(graph13):
         print("graph13 is Eulerian\nEuler Cycle:")
@@ -114,7 +114,7 @@ if __name__ == "__main__":
                [0,1,3,4],
                [0,1,2,4],
                [0,1,2,3]]
-    
+
     print("\ntest3:")
     if is_eulerian(graph14):
         print("graph14 is Eulerian\nEuler Cycle:")

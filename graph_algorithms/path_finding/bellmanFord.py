@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, "../")
 import graphs
 
 def bellman_ford(edges, V, start):

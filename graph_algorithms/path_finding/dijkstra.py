@@ -1,6 +1,8 @@
 # find shortest path from "beg" to every other vertex
 
 from queue import PriorityQueue
+import sys
+sys.path.insert(0, "../")
 import graphs
 
 # G[vertex][neighbourIdx] = (neighbour, cost: vertex -> neighbour)
@@ -47,13 +49,13 @@ def dijkstra_optimized(G: list[list[tuple[int, int | float]]], beg):
             parents[currentVertex] = currentParent
 
             for neighbour, cost in G[currentVertex]:
-                
+
                 # check if we have already relaxed neighbour; if not, add it to priority queue
                 if distances[neighbour] == INF:
                     toCheck.put((currentDistance + cost, neighbour, currentVertex))
-    
+
     return distances, parents
-    
+
 def dijkstra_matrix(G: list[list[tuple[int, int | float]]], beg):
     V = len(G)
     INF = float("inf")
@@ -73,7 +75,7 @@ def dijkstra_matrix(G: list[list[tuple[int, int | float]]], beg):
             if not relaxed[vertex] and distances[vertex] < minDistance:
                 minDistance = distances[vertex]
                 vertexToRelax = vertex
-        
+
         # check if we found any candidate
         if minDistance == INF:
             break
@@ -109,7 +111,7 @@ def test(start, testGraph):
         if not (dist1 == dist2 == dist3):
             testResult = "FAILED"
             break
-    
+
     print("test result:", testResult)
 
 if __name__ == "__main__":

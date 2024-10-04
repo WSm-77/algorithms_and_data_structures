@@ -34,7 +34,7 @@ if __name__ == "__main__":
             [6],
             [7],
             []]
-    
+
     priority = priority_sort(graph1)
     print(priority)
 

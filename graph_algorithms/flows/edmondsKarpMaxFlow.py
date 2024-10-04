@@ -1,4 +1,7 @@
 from collections import deque
+
+import sys
+sys.path.insert(0, "../")
 import graphs
 
 def get_number_of_verticies(E):
@@ -30,13 +33,13 @@ def update_flow(flow, bottleneck, parents, target):
 def edmonds_karp(matrix, source, target):
     V = len(matrix)
 
-    # flow[vertex][neighbour] represents how much water already flows from vertex 
+    # flow[vertex][neighbour] represents how much water already flows from vertex
     # to neighbour; if flow[vertex][neighbour] is negative it means that such
     # an amount of water already flows from neighbour to vertex
     flow = [[0 for _ in range(V)] for _ in range(V)]
     parents = [None]*V
-    
-    # because we will repeat BFS algorithm few times we use visitedId to differentiate 
+
+    # because we will repeat BFS algorithm few times we use visitedId to differentiate
     # in which instance of BFS we visited each vertex
     visitedId = 1
     visited = [0]*V
@@ -67,20 +70,20 @@ def edmonds_karp(matrix, source, target):
                     visited[neighbour] = visitedId
                     parents[neighbour] = vertex
                     toCheck.append((neighbour, min(currBottleneck, remaining)))
-        
+
         if not foundPath:
             break
 
         update_flow(flow, bottleneck, parents, target)
         visitedId += 1
         maxFlow += bottleneck
-    
+
     return maxFlow
 
 if __name__ == "__main__":
 
     print("######## test 1 ########\n\n")
-    
+
     source = 0
     target = 3
     matrix = edges_to_matrix(graphs.graph30_edges)

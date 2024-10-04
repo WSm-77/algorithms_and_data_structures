@@ -1,4 +1,6 @@
 from collections import deque
+import sys
+sys.path.insert(0, "../")
 import graphs
 
 def bfs(G, vertex):
@@ -9,7 +11,7 @@ def bfs(G, vertex):
     toCheck = deque()
     toCheck.append(vertex)
     visited[vertex] = True
-    
+
     while len(toCheck) > 0:
         vertex = toCheck.popleft()
         # print(f"vertex: {vertex}")
@@ -19,7 +21,7 @@ def bfs(G, vertex):
                 visited[neighbour] = True
                 parent[neighbour] = vertex
                 distance[neighbour] = distance[vertex] + 1
-    
+
     return visited, distance, parent
 
 def print_way(parentsTab, vertex):
@@ -30,14 +32,14 @@ def print_way(parentsTab, vertex):
         else:
             rek(parentsTab[vertex])
             print(f" -> {vertex}", end="")
-    
+
     rek(vertex)
     print()
 
 if __name__ == "__main__":
 
     ########## test 1 ##########
-    
+
     print("test1:")
     visited, distance, parentsTab = bfs(graphs.graph1_list, 0)
     print(visited)
@@ -47,7 +49,7 @@ if __name__ == "__main__":
         print_way(parentsTab, vertex)
 
     ########## test 2 ##########
-    
+
     print("\ntest2:")
     visited, distance, parentsTab = bfs(graphs.graph18_list, 0)
     print(visited)

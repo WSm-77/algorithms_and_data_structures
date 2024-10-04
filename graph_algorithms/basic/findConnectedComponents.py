@@ -37,7 +37,7 @@ def find_connected_component(G) -> list[list[int]]:
     V = len(G)
     visited = [False]*V
     processedVerteicesTab: list[int] = []
-    
+
     for vertex in range(V):
         if not visited[vertex]:
             dfs_visit1(vertex)
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                [9],
                [10],
                [5]]
-    
+
     print("test1:")
     print(find_connected_component(graph11))
 

@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, "../")
 import graphs
 
 def floyd_warshall(G: list[list[int]]):
@@ -70,7 +72,7 @@ def compare_to_dijkstra(graphList, distancesFloyd, parentsFloyd):
                     print(f"paths from {beg} to {end} differ")
                     print(*pathFloyd, sep=" -> ")
                     print(*pathDijkstra, sep=" -> ")
-    
+
     print("test result: ", end="")
     if sameDistances:
         print("PASSED")
