@@ -1,4 +1,5 @@
 from typing import Tuple, Callable
+from queue import PriorityQueue
 
 MOVES = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 INF = float("inf")
@@ -26,7 +27,8 @@ def a_star(maze: Maze, source: Tuple[int, int], target: Tuple[int, int], heurist
     visited = set()
     distance = {source: 0}
     parents = {source: None}
-    to_visit = {source}
+    to_visit = PriorityQueue()
+    to_visit.put((0, source))
 
     node = None
 
@@ -34,21 +36,9 @@ def a_star(maze: Maze, source: Tuple[int, int], target: Tuple[int, int], heurist
         if not to_visit:
             return [], []
 
-        min_cost = INF
-        next_node = None
-        for potential_next_node in to_visit:
-            if min_cost == INF or distance[potential_next_node] + heuristic(potential_next_node) < min_cost:
-                next_node = potential_next_node
-                min_cost = distance[potential_next_node] + heuristic(potential_next_node)
-
-        if next_node is None:
-            return [], []
-
-        # update current node
-        node = next_node
+        _, node = to_visit.get()
 
         # handle node visit
-        to_visit.remove(node)
         visited.add(node)
 
         # update to_visit
@@ -59,9 +49,9 @@ def a_star(maze: Maze, source: Tuple[int, int], target: Tuple[int, int], heurist
                 if new_node in visited or new_node in maze.walls:
                     continue
 
-                to_visit.add(new_node)
                 distance[new_node] = distance[node] + 1
                 parents[new_node] = node
+                to_visit.put((distance[new_node] + heuristic(new_node), new_node))
 
         print()
         draw_maze(maze, source, target, visited)
